@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>贪吃蛇</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        div {
+            width: 20px;
+            height: 20px;
+            background-color: #0f0;
+            border-radius: 50%;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+
+        #qiu {
+            width: 20px;
+            height: 20px;
+            background-color: #000;
+            border-radius: 50%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            display: block;
+        }
+        h3{
+            text-align: right;
+            font-size: 50px;
+            color: #f00;
+        }
+    </style>
+</head>
+
+<body>
+    <h3>10</h3>
+    <em id="qiu"><span id="num"></span></em>
+    <div id="min" style='left:0px;top:0px;'></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+
+</body>
+<script>
+    var oBody = document.querySelector('body');
+    var oMin = document.querySelector('#min');
+    var oDivs = document.querySelectorAll('div');
+    var oQiu = document.querySelector('#qiu');
+    var oNum = document.querySelector('#num');
+    var oH3 = document.querySelector('h3');
+    var maxtop = document.documentElement.clientHeight;
+    var maxleft = document.documentElement.clientWidth;
+    oQiu.style.left = Math.round(Math.random() * maxleft) + 'px';
+    oQiu.style.top = Math.round(Math.random() * maxtop) + 'px';
+
+    var timer;
+    var chang = 10;
+    var shijian = 200;
+
+
+    document.onkeydown = function (e) {
+        var ev = event || e;
+        var keyCode = ev.keyCode || ev.which;
+        clearInterval(timer);
+
+        if (keyCode === 38) {
+            timer = setInterval(function () {
+                move('top', '-')
+            }, shijian)
+        } else if (keyCode === 40) {
+
+            timer = setInterval(function () {
+                move('top', '+')
+            }, shijian)
+        } else if (keyCode === 37) {
+            timer = setInterval(function () {
+                move('left', '-')
+            }, shijian)
+        } else if (keyCode === 39) {
+            timer = setInterval(function () {
+                move('left', '+')
+            }, shijian)
+        }
+    }
+
+    var oleft = 0;
+    var otop = 0;
+
+    timer = setInterval(function () {
+        move('left', '+')
+
+    }, shijian)
+    function move(a, b) {
+        var oDivs = document.querySelectorAll('div');
+
+
+        if (a == 'top') {
+            if (b == '+') {
+                otop += 15;
+            } else if (b == '-') {
+                otop -= 15;
+            }
+
+            oMin.style.top = otop + 'px';
+
+            for (var i = oDivs.length - 1; i > 0; i--) {
+                oDivs[i].style.top = oDivs[i - 1].style.top;
+                oDivs[i].style.left = oDivs[i - 1].style.left;
+            }
+        }
+
+
+        if (a == 'left') {
+
+            if (b == '+') {
+                oleft += 15;
+            } else if (b == '-') {
+                oleft -= 15;
+            }
+
+            oMin.style.left = oleft + 'px';
+
+            for (var i = oDivs.length - 1; i > 0; i--) {
+                oDivs[i].style.left = oDivs[i - 1].style.left;
+                oDivs[i].style.top = oDivs[i - 1].style.top;
+            }
+        }
+
+
+        var num1 = Math.abs(parseInt(oMin.style.top) - parseInt(oQiu.style.top));
+        var num2 = Math.abs(parseInt(oMin.style.left) - parseInt(oQiu.style.left));
+
+
+
+        if (num1 < 10 && num2 < 10) {
+            oQiu.style.display = 'none';
+            // var ostr = oNum.innerHTML = `${num1}${num2}`;
+
+            // // console.log(ostr.valueOf());
+            // var m = ostr.charAt(0);
+            // var n = ostr.charAt(1);
+            // console.log(m, n, ostr);
+            var dom = document.createElement('div');
+            document.body.appendChild(dom);
+            chang++;
+            oH3.innerText = chang;
+
+            return ostr();
+
+        }
+    }
+
+    function ostr(m, n) {
+        oQiu.style.left = Math.round(Math.random() * maxleft) + 'px';
+        oQiu.style.top = Math.round(Math.random() * maxtop) + 'px';
+        oQiu.style.display = 'block';
+        var oDivs = document.querySelectorAll('div');
+        if (chang >= 20) {
+            if(chang == 20){
+                shijian -= 100;
+            }
+            for (i = 0; i < oDivs.length; i++) {
+                oDivs[i].style.backgroundColor = 'yellow';
+            }
+        }
+        if (chang >= 44) {
+            if(chang == 44){
+                shijian -= 30;
+            }
+            for (i = 0; i < oDivs.length; i++) {
+                oDivs[i].style.backgroundColor = 'red';
+            }
+        }
+        if (chang >= 66) {
+            if(chang == 66){
+                shijian -= 10;
+            }
+            for (i = 0; i < oDivs.length; i++) {
+                oDivs[i].style.backgroundColor = 'black';
+            }
+        }
+
+    }
+
+
+
+
+
+
+    // if (num1 > 10 || num2 > 10) {
+    //     oQiu.style.left = Math.round(Math.random() * maxleft) + 'px';
+    //     oQiu.style.top = Math.round(Math.random() * maxtop) + 'px';
+    //     oQiu.style.display = 'block';
+    // }
+
+</script>
+
+</html>
